@@ -53,7 +53,7 @@ export default function SearchPage() {
             <h2>{card.name}</h2>
             <p>{card.text}</p>
             <p>レアリティ: {card.rarity}</p>
-            <img src={card.imageUrl} alt={card.name} />
+            <image src={card.imageUrl} alt={card.name} />
           </li>
         ))}
       </ul>
