@@ -1,6 +1,7 @@
 // app/api/search/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import Magic from 'mtgsdk-ts';
+import * as Magic from "mtgsdk-ts";
+
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
