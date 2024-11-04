@@ -2,11 +2,11 @@
 "use client";
 
 import { useState } from 'react';
-
+import Image from 'next/image';
 export default function SearchPage() {
   const [cardName, setCardName] = useState('');
   const [cardSet, setCardSet] = useState('');
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<Array<string>[]>([]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -53,7 +53,13 @@ export default function SearchPage() {
             <h2>{card.name}</h2>
             <p>{card.text}</p>
             <p>レアリティ: {card.rarity}</p>
-            <image src={card.imageUrl} alt={card.name} />
+            <Image 
+                  src={card.imageUrl} 
+                  alt={card.name} 
+                  width={150} // 幅を指定
+                  height={200} // 高さを指定
+                  priority // 重要な画像としてロードするオプション
+                />
           </li>
         ))}
       </ul>
