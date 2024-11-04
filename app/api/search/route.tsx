@@ -8,8 +8,11 @@ export async function GET(request: NextRequest) {
   const cardSet = searchParams.get('cardSet');
 
   try {
-    const cards = await Magic.Cards
-      .where({ name: cardName,language: 'Japanese',set: cardSet });
+    const cards = await Magic.Cards.where({
+      name: cardName || undefined,  // null の場合は undefined に
+      language: 'Japanese',
+      set: cardSet || undefined,     // null の場合は undefined に
+    });
     return NextResponse.json(cards);
   } catch (error) {
     console.error("APIリクエストのエラー:", error);

@@ -3,10 +3,19 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+interface searchCard {
+  id: string;
+  name: string;
+  text: string;
+  rarity: string;
+  manaCost:string;
+  cmc:string;
+  imageUrl: string; // 画像のURLを含む場合
+}
 export default function SearchPage() {
   const [cardName, setCardName] = useState('');
   const [cardSet, setCardSet] = useState('');
-  const [results, setResults] = useState<Array<string>[]>([]);
+  const [results, setResults] = useState<searchCard[]>([]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -16,55 +25,49 @@ export default function SearchPage() {
       if (!response.ok) throw new Error(`ステータスコード: ${response.status}`);
       
       const data = await response.json();
-      setResults(data);
+      console.log("取得したデータ:", data); // デバッグ用
+      setResults(data); // ここでresultsにデータをセット
     } catch (error) {
       console.error("エラー:", error);
-      alert(`APIリクエストが失敗しました: ${error.message}`);
+      if (error instanceof Error) {
+        alert(`APIリクエストが失敗しました: ${error.message}`);
+      } else {
+        alert("不明なエラーが発生しました。");
+      }
     }
   };
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="cardName">カード名</label>
         <input
           type="text"
-          id="cardName"
           value={cardName}
           onChange={(e) => setCardName(e.target.value)}
+          placeholder="カード名"
         />
-
-        <label htmlFor="cardSet">セット名：</label>
         <input
           type="text"
-          id="cardSet"
           value={cardSet}
           onChange={(e) => setCardSet(e.target.value)}
+          placeholder="セット名"
         />
         <button type="submit">検索</button>
       </form>
 
-      {results.length > 0 && (
-        <div>
-          <h2>検索結果</h2>
-          <ul>
-        {results.map((card) => (
-          <li key={card.id}>
-            <h2>{card.name}</h2>
-            <p>{card.text}</p>
-            <p>レアリティ: {card.rarity}</p>
-            <Image 
-                  src={card.imageUrl} 
-                  alt={card.name} 
-                  width={150} // 幅を指定
-                  height={200} // 高さを指定
-                  priority // 重要な画像としてロードするオプション
-                />
-          </li>
-        ))}
-      </ul>
-        </div>
-      )}
+      <ul>
+  {results.map((card, index) => (
+    <li key={index}>
+      <h2>{card.name}</h2>
+      <p>マナコスト: {card.manaCost}</p>
+      <p>CMC: {card.cmc}</p>
+      <p>カードテキスト：{card.text}</p>
+      <Image src={card.imageUrl} alt={card.name} width={200} height={300} />
+    </li>
+  ))}
+</ul>
+
     </div>
   );
 }
+
